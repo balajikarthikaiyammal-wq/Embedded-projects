@@ -1,0 +1,40 @@
+// Soil Moisture Sensor Pin
+int sensorPin = A0;
+
+// Variable to store sensor value
+int moistureValue = 0;
+
+void setup()
+{
+    // Start serial communication
+    Serial.begin(9600);
+}
+
+void loop()
+{
+    // Read analog value from sensor
+    moistureValue = analogRead(sensorPin);
+
+    // Print value to serial monitor
+    Serial.print("Soil Moisture Value: ");
+    Serial.println(moistureValue);
+
+    // Moisture condition check
+    if(moistureValue < 300)
+    {
+        Serial.println("Soil is very wet");
+    }
+    else if(moistureValue >= 300 && moistureValue < 700)
+    {
+        Serial.println("Soil moisture is moderate");
+    }
+    else
+    {
+        Serial.println("Soil is dry");
+    }
+
+    Serial.println("------------------------");
+
+    // Delay for next reading
+    delay(2000);
+}
