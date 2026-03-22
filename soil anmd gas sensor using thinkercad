@@ -1,0 +1,24 @@
+#define GAS_ANALOG A0
+const int soilMoisturePin = A1;
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+
+  // 🧪 Gas Sensor
+  int gasValue = analogRead(GAS_ANALOG);
+
+  // 🌱 Soil Sensor
+  int moistureValue = analogRead(soilMoisturePin);
+
+  // 📊 Output
+  Serial.print("Gas Value: ");
+  Serial.print(gasValue);
+
+  Serial.print(" | Soil Moisture: ");
+  Serial.println(moistureValue);
+
+  delay(1000);
+}
