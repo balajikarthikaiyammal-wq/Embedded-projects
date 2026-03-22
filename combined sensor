@@ -1,0 +1,68 @@
+pinMode(pirPin, INPUT);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  pinMode(led1, OUTPUT);
+  pinMode(led2, OUTPUT);
+  pinMode(led3, OUTPUT);
+
+  // Initialize LEDs off
+  digitalWrite(led1, LOW);
+  digitalWrite(led2, LOW);
+  digitalWrite(led3, LOW);
+
+  Serial.println("System Ready...");
+}
+
+void loop() {
+  // === PIR Sensor ===
+  int pirState = digitalRead(pirPin);
+
+  // === Ultrasonic Sensor ===
+  long duration;
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  duration = pulseIn(echoPin, HIGH);
+  float distance = duration * 0.034 / 2; // distance in cm
+
+  // === Temperature Sensor ===
+  int tempReading = analogRead(tempPin);
+  float voltage = tempReading * (5.0 / 1023.0);  // convert ADC to voltage
+  float temperatureC = (voltage - 0.5) * 100.0;  // TMP36 formula
+
+  // === Debug Print ===
+  Serial.print("PIR: "); Serial.print(pirState);
+  Serial.print(" | Temp: "); Serial.print(temperatureC);
+  Serial.print(" C | Dist: "); Serial.print(distance);
+  Serial.println(" cm");
+
+  // === LED Control ===
+  // LED1 → PIR
+  if (pirState == HIGH) {
+    digitalWrite(led1, HIGH);
+    Serial.println("LED1 ON (Motion Detected)");
+  } else {
+    digitalWrite(led1, LOW);
+  }
+
+  // LED2 → Temperature
+  if (temperatureC >= 20 && temperatureC <= 30) {
+    digitalWrite(led2, HIGH);
+    Serial.println("LED2 ON (Temp in range 20–30C)");
+  } else {
+    digitalWrite(led2, LOW);
+  }
+
+  // LED3 → Distance
+  if (distance >= 50 && distance <= 100) {
+    digitalWrite(led3, HIGH);
+    Serial.println("LED3 ON (Distance 50–100cm)");
+  } else {
+    digitalWrite(led3, LOW);
+  }
+
+  delay(500);  // wait 0.5s before next reading
+}
